@@ -1,14 +1,13 @@
-# QuTiP-Bio-HEOM
+# Scalable Python Pipeline for Non-Markovian Quantum Dynamics
 
-A scalable, open-source Python wrapper pipeline built upon [QuTiP](https://qutip.org/) to automate and streamline multi-bath Hierarchical Equations of Motion (HEOM) simulations in resource-constrained environments. 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23186879.svg)](https://doi.org/10.5281/zenodo.23186879)
 
-This package is designed to translate 3D biological spatial coordinates (e.g., Microtubule Tryptophan networks) into exact distance matrices and execute highly parallelized, fault-tolerant phase-space sweeps.
+This repository contains the Python-based simulation pipeline for evaluating exciton dynamics in a 3D N=7 tryptophan network using the Hierarchical Equations of Motion (HEOM) approach via QuTiP.
 
-## Installation
+## Repository Structure
+* `/examples`: Contains the official academic scripts used for the manuscript.
+  * `figure_1.py` ~ `figure_8.py`: Scripts generating the main figures for the energy transfer efficiency and parameter sweeps.
+  * `convergence_test.py`: Sensitivity and convergence analysis across varying hierarchical depths (max_depth) and ensemble sizes (n_traj).
 
-You can install the package locally by cloning this repository and running:
-
-```bash
-git clone [https://github.com/JungbinChoi-2007/QuTiP-bio-HEOM.git](https://github.com/JungbinChoi-2007/QuTiP-bio-HEOM.git)
-cd QuTiP-bio-HEOM
-pip install .
+## Citation
+If you use this code in your research, please cite it using the Zenodo DOI above.
