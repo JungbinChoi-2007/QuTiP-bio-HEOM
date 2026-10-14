@@ -82,7 +82,7 @@ def execute_pipeline():
     Z = results_array[:, 2].reshape(20, 20).T
 
     plt.figure(figsize=(9, 7))
-    im = plt.imshow(Z, extent=[10, 500, 50, 1000], origin='lower', aspect='auto', cmap='magma')
+    im = plt.imshow(Z, extent=[10, 500, 50, 1000], origin='lower', aspect='auto', cmap='magma', vmin=0.0)
     plt.colorbar(im, label="Transfer Efficiency (P7 at t=1.0)")
     plt.xlabel(r"Reorganization Energy, $\lambda$ (cm$^{-1}$)")
     plt.ylabel(r"Cutoff Frequency, $\gamma$ (cm$^{-1}$)")
@@ -90,7 +90,7 @@ def execute_pipeline():
     # Set standardized title aligned with manuscript caption
     plt.title("Idealized 1D Uniform Chain: Energy Transfer Efficiency")
     
-    output_filename = "Figure_2.png"
+    output_filename = "figure_2.png"
     plt.savefig(output_filename, dpi=300, bbox_inches='tight')
     print(f"Heatmap visualization saved as '{output_filename}'.")
     

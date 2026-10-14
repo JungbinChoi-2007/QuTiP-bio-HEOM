@@ -5,7 +5,7 @@ Project: Scalable Python Pipeline for Non-Markovian Quantum Dynamics
 Author: Jungbin Choi
 License: MIT License
 Description: 
-    Phase-Space Parameter Sweep (Quantum Coherence Preservation).
+    Phase-Space Parameter Sweep (Initial Site Survival Probability).
     Evaluates the survival probability of the exciton across varying 
     reorganization energies and cutoff frequencies. Incorporates basic 
     auto-checkpointing logic to demonstrate fault tolerance.
@@ -83,15 +83,15 @@ def execute_sweeper_pipeline():
     Z = results_array[:, 2].reshape(10, 10).T
 
     plt.figure(figsize=(8, 6))
-    im = plt.imshow(Z, extent=[10, 500, 50, 1000], origin='lower', aspect='auto', cmap='viridis', vmax=1.0)
+    im = plt.imshow(Z, extent=[10, 500, 50, 1000], origin='lower', aspect='auto', cmap='viridis', vmin=0.0, vmax=1.0)
     plt.colorbar(im, label="Probability (P1 at t=0.5)")
     plt.xlabel(r"Reorganization Energy, $\lambda$ (cm$^{-1}$)")
     plt.ylabel(r"Cutoff Frequency, $\gamma$ (cm$^{-1}$)")
     
-    # Set standardized title aligned with manuscript caption
-    plt.title("HEOM Parameter Sweep: Quantum Coherence Preservation")
+    # Set standardized title reflecting diagonal population survival probability
+    plt.title("HEOM Parameter Sweep: Initial Site Survival Probability")
     
-    output_filename = "Figure_6.png"
+    output_filename = "figure_6.png"
     plt.savefig(output_filename, dpi=300, bbox_inches='tight')
     print(f"Heatmap explicitly bounded to <= 1.0 saved as '{output_filename}'.")
     

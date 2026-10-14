@@ -8,7 +8,7 @@ Description:
     Provisional Biological Demonstration & Pipeline Validation.
     Executes a massively parallel 20x20 parameter sweep evaluating the 
     ensemble-averaged transfer efficiency across the complete 3D empirical 
-    geometry. Features dynamic auto-checkpointing for cloud environments.
+    geometry. Features dynamic auto-checkpointing for generic environments.
 ==============================================================================
 """
 
@@ -20,15 +20,10 @@ from qutip import Qobj, basis
 from qutip.solver.heom import HEOMSolver, DrudeLorentzBath
 import time
 import gc
-from google.colab import drive
 
 def execute_ensemble_pipeline():
-    print("Mounting Google Drive for persistent auto-checkpointing...")
-    drive.mount('/content/drive')
-    
-    # Persistent storage paths for fault-tolerant execution
-    save_path_npy = '/content/drive/MyDrive/N7_Ensemble_Sweep_results.npy'
-    save_path_png = '/content/drive/MyDrive/N7_Ensemble_Sweep_heatmap.png'
+    # Persistent storage path for fault-tolerant execution (Local Directory)
+    save_path_npy = 'N7_Ensemble_Sweep_results.npy'
 
     print("Initiating N=7 Ensemble-Averaged 3D Sweep (20x20 Grid) with Auto-Recovery...")
 
@@ -150,7 +145,7 @@ def execute_ensemble_pipeline():
         Z = results_array[:, 2].reshape(20, 20).T
 
         plt.figure(figsize=(10, 8))
-        im = plt.imshow(Z, extent=[10, 500, 50, 1000], origin='lower', aspect='auto', cmap='magma')
+        im = plt.imshow(Z, extent=[10, 500, 50, 1000], origin='lower', aspect='auto', cmap='magma', vmin=0.0)
         
         # Scientific notation formatting for extremely low probability values
         cbar = plt.colorbar(im, label="Transfer Efficiency (P7 at t=1.0, 3-Ensemble Avg)")
@@ -159,13 +154,11 @@ def execute_ensemble_pipeline():
         plt.xlabel(r"Reorganization Energy, $\lambda$ (cm$^{-1}$)")
         plt.ylabel(r"Cutoff Frequency, $\gamma$ (cm$^{-1}$)")
         
-        # Set standardized title aligned with manuscript caption
-        plt.title("Ensemble-Averaged 3D Tryptophan Network: Quantum Coherence Preservation")
+        # Set standardized title aligned with manuscript caption and physical observable
+        plt.title("Ensemble-Averaged 3D Tryptophan Network: Energy Transfer Efficiency")
         
-        output_filename = "Figure_8.png"
+        output_filename = "figure_8.png"
         plt.savefig(output_filename, dpi=300, bbox_inches='tight')
-        # Also save to drive for persistence
-        plt.savefig(save_path_png, dpi=300, bbox_inches='tight')
         print(f"Heatmap rendered and saved as '{output_filename}'.")
         
         plt.show()
