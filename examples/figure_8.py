@@ -8,7 +8,7 @@ Description:
     Provisional Biological Demonstration & Pipeline Validation.
     Executes a massively parallel 20x20 parameter sweep evaluating the 
     ensemble-averaged transfer efficiency across the complete 3D empirical 
-    geometry. Features dynamic auto-checkpointing for cloud environments.
+    geometry. Features dynamic auto-checkpointing for generic environments.
 ==============================================================================
 """
 
@@ -20,17 +20,12 @@ from qutip import Qobj, basis
 from qutip.solver.heom import HEOMSolver, DrudeLorentzBath
 import time
 import gc
-from google.colab import drive
 
-def execute_ultimate_pipeline():
-    print("Mounting Google Drive for persistent auto-checkpointing...")
-    drive.mount('/content/drive')
-    
-    # Persistent storage paths for fault-tolerant execution
-    save_path_npy = '/content/drive/MyDrive/N7_Ultimate_Sweep_results.npy'
-    save_path_png = '/content/drive/MyDrive/N7_Ultimate_Sweep_heatmap.png'
+def execute_ensemble_pipeline():
+    # Persistent storage path for fault-tolerant execution (Local Directory)
+    save_path_npy = 'N7_Ensemble_Sweep_results.npy'
 
-    print("Initiating N=7 Ultimate 3D Sweep (20x20 Grid) with Auto-Recovery...")
+    print("Initiating N=7 Ensemble-Averaged 3D Sweep (20x20 Grid) with Auto-Recovery...")
 
     # 1. Base System Parameters
     N = 7
@@ -71,7 +66,7 @@ def execute_ultimate_pipeline():
     Q_ops = [basis(N, i) * basis(N, i).dag() for i in range(N)]
 
     # 3. Core Simulation Logic with Static Disorder (Monte Carlo)
-    def run_ultimate_model(lam, gamma, n_traj=3):
+    def run_ensemble_model(lam, gamma, n_traj=3):
         baths = [DrudeLorentzBath(Q_ops[i], lam=lam, gamma=gamma, T=T, Nk=1) for i in range(N)]
         P7_sum = 0.0
 
@@ -125,7 +120,7 @@ def execute_ultimate_pipeline():
             l, g = param_grid[idx]
 
             step_start = time.time()
-            res = run_ultimate_model(l, g)
+            res = run_ensemble_model(l, g)
             results.append(res)
             step_end = time.time()
 
@@ -150,7 +145,7 @@ def execute_ultimate_pipeline():
         Z = results_array[:, 2].reshape(20, 20).T
 
         plt.figure(figsize=(10, 8))
-        im = plt.imshow(Z, extent=[10, 500, 50, 1000], origin='lower', aspect='auto', cmap='magma')
+        im = plt.imshow(Z, extent=[10, 500, 50, 1000], origin='lower', aspect='auto', cmap='magma', vmin=0.0)
         
         # Scientific notation formatting for extremely low probability values
         cbar = plt.colorbar(im, label="Transfer Efficiency (P7 at t=1.0, 3-Ensemble Avg)")
@@ -158,12 +153,12 @@ def execute_ultimate_pipeline():
 
         plt.xlabel(r"Reorganization Energy, $\lambda$ (cm$^{-1}$)")
         plt.ylabel(r"Cutoff Frequency, $\gamma$ (cm$^{-1}$)")
-        plt.title("Ultimate 3D Tryptophan Network: Quantum Coherence Preservation")
         
-        output_filename = "Figure_8.png"
+        # Set standardized title aligned with manuscript caption and physical observable
+        plt.title("Ensemble-Averaged 3D Tryptophan Network: Energy Transfer Efficiency")
+        
+        output_filename = "figure_8.png"
         plt.savefig(output_filename, dpi=300, bbox_inches='tight')
-        # Also save to drive for persistence
-        plt.savefig(save_path_png, dpi=300, bbox_inches='tight')
         print(f"Heatmap rendered and saved as '{output_filename}'.")
         
         plt.show()
@@ -171,4 +166,4 @@ def execute_ultimate_pipeline():
         print("Execution halted prior to completion. Re-run script to resume from latest checkpoint.")
 
 if __name__ == "__main__":
-    execute_ultimate_pipeline()
+    execute_ensemble_pipeline()
